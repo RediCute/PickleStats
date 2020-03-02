@@ -1,0 +1,26 @@
+﻿@page "/fetchdata"
+
+@using Newtonsoft.Json
+@using System.IO
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (BatchData == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @BatchData.Auction[0].ItemName
+}
+
+@code {
+    private Auction[] BatchData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+}
