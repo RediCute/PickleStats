@@ -2,25 +2,101 @@
 
 @using Newtonsoft.Json
 @using System.IO
+@using System
+@using Data
+@using Blazorise.Charts
 
-<h1>Weather forecast</h1>
+<Blazorise.Button Clicked="@(async () => await HandleRedraw())">Redraw</Blazorise.Button>
 
-<p>This component demonstrates fetching data from a service.</p>
+<BarChart @ref="lineChart" TItem="double" Hovered="OnHover"/>
 
-@if (BatchData == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    @BatchData.Auction[0].ItemName
-}
+@code{
 
-@code {
-    private Auction[] BatchData;
+		/*protected override void OnInitialized()
+		{
+			base.OnInitialized();
+			getData();
+		}
 
-    protected override async Task OnInitializedAsync()
-    {
-        
-    }
+		string path = @"C:/Users/Nicl/Desktop/batch_0.json";
+		private List<Auctions> auctions;
+
+		private void getData()
+		{
+			File.ReadAllText(path);
+		auctions = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Auctions>>(File.ReadAllText(path));
+
+	}*/
+
+	//LineChart<double> lineChart;
+
+	BarChart<double> lineChart;
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await HandleRedraw();
+		}
+	}
+
+	private void OnHover(ChartMouseEventArgs args) 
+	{
+			}
+
+	async Task HandleRedraw()
+	{
+		lineChart.Clear();
+
+		lineChart.AddLabel(Labels);
+
+		lineChart.AddDataSet(GetData());
+
+
+
+		await lineChart.Update();
+	}
+
+
+	LineChartDataset<double> GetLineChartDataset()
+	{
+		return new LineChartDataset<double>
+		{
+			Label = "# of randoms",
+			Data = RandomizeData(),
+			BackgroundColor = backgroundColors,
+			BorderColor = borderColors,
+			Fill = true,
+			PointRadius = 2,
+			BorderDash = new List<int> { }
+
+		};
+	}
+
+	BarChartDataset<double> GetData()
+	{
+		return new BarChartDataset<double>
+		{
+			Label = "PLSWORK",
+			Data = RandomizeData(),
+			BorderColor = borderColors,
+			BackgroundColor = backgroundColors,
+
+		};
+	}
+
+
+	string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
+	List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+	List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+
+
+	List<double> RandomizeData()
+	{
+		var r = new Random();
+
+		return new List<double> { r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble() };
+	}
 }

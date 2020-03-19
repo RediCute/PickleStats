@@ -12,7 +12,8 @@ namespace PickleStats.Data
         public Task<Auctions> GetAuctionsAsync()
         {
             var json = File.ReadAllText("C:/Users/Darell/source/repos/PickleStats/PickleStats/bin/Debug/netcoreapp3.1/Resources/batch_0.json");
-            return 
+            return null;
         }
+
     }
 }
